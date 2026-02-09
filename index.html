@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>پرسیارێکی گرنگ</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    
+    <style>
+        :root {
+            /* ڕەنگەکان گۆڕدراون بۆ ستایلێکی جیاوازتر */
+            --primary-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #0f172a;
+            /* باگراوندێکی تاریک و مۆدێرن */
+            background-image: 
+                radial-gradient(at 0% 100%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            color: var(--text-color);
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-width: 90%;
+            width: 450px;
+            position: relative;
+            z-index: 10;
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2.2rem;
+            margin-bottom: 2.5rem;
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            min-height: 80px;
+        }
+
+        button {
+            padding: 14px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        /* دوگمەی بەڵێ - ئەمە ڕادەکات */
+        .btn-yes {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            z-index: 20;
+            position: relative; /* سەرەتا جێگیرە */
+        }
+
+        /* دوگمەی نەخێر - ئەمە ئیش دەکات */
+        .btn-no {
+            background: rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-no:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* شاشەی کۆتایی */
+        .final-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.98);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .final-message h2 {
+            font-size: 2rem;
+            color: #4ade80; /* ڕەنگی سەوز بۆ سەرکەوتن */
+            margin-bottom: 20px;
+        }
+
+        .final-message p {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            max-width: 600px;
+        }
+
+        .emoji-reaction {
+            font-size: 5rem;
+            margin-top: 20px;
+            display: block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div style="position: fixed; top: 10%; left: 10%; width: 300px; height: 300px; background: #3b82f6; filter: blur(120px); opacity: 0.2; border-radius: 50%; z-index: -1;"></div>
+    <div style="position: fixed; bottom: 10%; right: 10%; width: 400px; height: 400px; background: #8b5cf6; filter: blur(120px); opacity: 0.2; border-radius: 50%; z-index: -1;"></div>
+
+    <div class="glass-card" id="mainCard">
+        <h1>ئایا بیری حەمە دەکەی؟ 🤔</h1>
+        
+        <div class="btn-container">
+            <button class="btn-yes" id="runBtn">بەڵێ 🥺</button>
+            <button class="btn-no" onclick="showTruth()">نەخێر 🗿</button>
+        </div>
+    </div>
+
+    <div class="final-message" id="finalMessage">
+        <h2>پیرۆزە! 👏</h2>
+        <p>هەر خۆی دەمزانی بیرم ناکەی دڵە 😂💔</p>
+        <span class="emoji-reaction">👻</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        const runBtn = document.getElementById('runBtn'); // ئێستا بەڵێ ڕادەکات
+        const mainCard = document.getElementById('mainCard');
+        const finalMessage = document.getElementById('finalMessage');
+        
+        let isMoving = false;
+
+        // فەنکشنی ڕاکردن (بۆ دوگمەی بەڵێ)
+        function moveButton(e) {
+            if(e) e.preventDefault(); // ڕێگری لە کلیک دەکات لە مۆبایل
+
+            if (isMoving) return;
+            isMoving = true;
+
+            // هەژمارکردنی شوێنی نوێ
+            const x = Math.random() * (window.innerWidth - runBtn.offsetWidth - 50);
+            const y = Math.random() * (window.innerHeight - runBtn.offsetHeight - 50);
+
+            // گۆڕینی شوێن
+            runBtn.style.position = 'fixed';
+            runBtn.style.left = `${x}px`;
+            runBtn.style.top = `${y}px`;
+            
+            // گۆڕینی ڕەنگ کاتێک ڕادەکات (بۆ گاڵتە)
+            runBtn.innerText = "ناگیرێ! 😜";
+            
+            setTimeout(() => {
+                isMoving = false;
+                runBtn.innerText = "بەڵێ 🥺"; // دەگەڕێتەوە دۆخی ئاسایی
+            }, 800);
+        }
+
+        // دانانی ڕووداوەکان بۆ دوگمەی بەڵێ
+        runBtn.addEventListener('mouseover', moveButton); // بۆ ماوس
+        runBtn.addEventListener('touchstart', moveButton); // بۆ دەست (مۆبایل)
+        runBtn.addEventListener('click', moveButton); // بۆ دڵنیایی
+
+        // فەنکشنی دەرکەوتنی ڕاستییەکە (کە نەخێر داگرت)
+        function showTruth() {
+            mainCard.style.transform = 'scale(0.8) translateY(100px)';
+            mainCard.style.opacity = '0';
+            
+            setTimeout(() => {
+                mainCard.style.display = 'none';
+                finalMessage.style.display = 'flex';
+                
+                setTimeout(() => {
+                    finalMessage.style.opacity = '1';
+                    fireConfetti();
+                }, 50);
+            }, 300);
+        }
+
+        // تەقینەوەی کۆتایی
+        function fireConfetti() {
+            var duration = 3000;
+            var end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#4ade80', '#ffffff'] // ڕەنگی سەوز و سپی
+                });
+                
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#4ade80', '#ffffff']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+    </script>
+</body>
+</html>
